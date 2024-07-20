@@ -4,12 +4,16 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
-    colors: {
-      "ash-gray": "#CBD4C2",
-      "davy-gray": "#000022",
-      "snow": "#FFFCFF"
-    }
+    extend: {
+      height: {
+        "100": "500px"
+      },
+      colors: {
+        "ash-gray": "#7E78D2",
+        "davy-gray": "#000022",
+        "snow": "#FFFCFF"
+      },
+    },
   },
   plugins: [],
 }

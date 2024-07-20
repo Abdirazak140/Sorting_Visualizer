@@ -17,7 +17,7 @@ export default function Navbar() {
                 <IconContext.Provider
                     value={{ color: 'snow'}}
                 >
-                    <SlMenu size={50} className="" />
+                    <SlMenu size={35} className="" />
                 </IconContext.Provider>
             </div>
         </nav>
