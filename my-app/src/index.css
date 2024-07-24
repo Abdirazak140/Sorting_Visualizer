@@ -55,3 +55,7 @@
   background: #7e78d2;
   transition: background 0s;
 }
+
+#play-btn {
+  --color: rgb(156, 255, 156);
+}
