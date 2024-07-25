@@ -59,3 +59,7 @@
 #play-btn {
   --color: rgb(156, 255, 156);
 }
+
+#stop-btn {
+  --color: rgb(255, 156, 156);
+}
