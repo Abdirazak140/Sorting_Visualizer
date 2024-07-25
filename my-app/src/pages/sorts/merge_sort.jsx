@@ -83,6 +83,7 @@ export default function MergeSort() {
                 </div>
                 <div>
                     <button id="play-btn" className={`options text-center ${isSorting ? 'invisible' : ''}`} onClick={start}>start</button>
+                    <button id="stop-btn" className={`options text-center ${isSorting ? '' : 'invisible'}`}>Stop</button>
                 </div>
             </div>
         </div>
