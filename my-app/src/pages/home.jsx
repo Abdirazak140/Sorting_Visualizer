@@ -16,9 +16,9 @@ export default function Home() {
             </div>
             <div className='text-snow flex flex-row items-center mt-60 text-lg space-x-4'>
                 <Link to="/merge-sort" className='options text-center'>Merge</Link>
-                <Link className='options text-center'>Quick</Link>
+                <Link to="/quick-sort" className='options text-center'>Quick</Link>
                 <Link className='options text-center'>Bubble</Link>
-                <Link className='options text-center'>Sleep</Link>
+                <Link className='options text-center'>Miracle</Link>
             </div>
         </div>
     )
