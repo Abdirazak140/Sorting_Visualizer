@@ -61,5 +61,9 @@
 }
 
 #stop-btn {
-  --color: rgb(255, 156, 156);
+  --color: rgb(255, 184, 184);
+}
+
+#reset-btn {
+  --color: rgb(221, 12, 12);
 }

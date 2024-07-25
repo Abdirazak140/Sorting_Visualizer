@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Bar from "../../components/bar"
 
 export default function MergeSort() {
@@ -6,8 +6,9 @@ export default function MergeSort() {
     const [currentSampleSize, setCurrentSampleSize] = useState(100)
     const [samples, setSamples] = useState(Array.from(Array(100).keys()).map((value) => value + 1))
     const [isSorting, setIsSorting] = useState(false);
+    const [sortingSamples, setSortingSamples] = useState([])
 
-    function generateSamples() {
+    async function generateSamples() {
         const samples = Array.from(Array(newSampleSize).keys()).map((value) => value + 1)
         setCurrentSampleSize(newSampleSize)
         setSamples(samples)
@@ -34,11 +35,12 @@ export default function MergeSort() {
         const leftSortedArray = await mergeSort(leftArray);
         const rightSortedArray = await mergeSort(rightArray);
 
-        return await merge(leftSortedArray, rightSortedArray);
+        return merge(leftSortedArray, rightSortedArray);
     }
 
     async function merge(leftArray, rightArray) {
         let sortedArray = [];
+        let unsortedArray = [];
 
         while (leftArray.length && rightArray.length) {
             if (leftArray[0] < rightArray[0]) {
@@ -47,10 +49,14 @@ export default function MergeSort() {
                 sortedArray.push(rightArray.shift());
             }
 
-            setSamples([...sortedArray, ...leftArray, ...rightArray]);
-            await sleep(50);
+            unsortedArray = samples
+            unsortedArray = unsortedArray.filter(element => ![...sortedArray, ...leftArray, ...rightArray].includes(element))
+            setSamples([...sortingSamples, ...sortedArray, ...leftArray, ...rightArray, ...unsortedArray]);
+     
+            await sleep(10);
         }
-
+        setSortingSamples(sortedArray)
+        await sleep(10);
         return [...sortedArray, ...leftArray, ...rightArray];
     }
 
@@ -74,16 +80,33 @@ export default function MergeSort() {
                 {samples.map((value, index) => (
                     <Bar height={(value / currentSampleSize) * 100} />
                 ))}
+                {/* {!isSorting && samples.map((value, index) => (
+                    <Bar height={(value / currentSampleSize) * 100} />
+                ))}
+                {isSorting && sortingSamples.map((subset, subsetIndex) => (
+                    <div>
+                        {
+                            subset.map((value, index) => (
+                                <Bar height={(value / currentSampleSize) * 100} />
+                            ))
+                        }
+                    </div>
+                ))} */}
             </div>
             <div className="ml-10 mt-4 mb-20 flex flex-row space-x-4">
-                <div className="flex flex-row space-x-4">
-                    <input type="number" id="samples" name="samples" className={isSorting ? 'invisible' : ''} value={newSampleSize} onChange={handleSampleSizeChange} />
-                    <button className={`options text-center ${isSorting ? 'invisible' : ''}`} onClick={generateSamples}>Generate</button>
-                    <button className={`options text-center ${isSorting ? 'invisible' : ''}`} onClick={shuffle}>Shuffle</button>
+                <div className={isSorting ? 'hidden' : ''}>     
+                    <div className="flex flex-row space-x-4">
+                        <input type="number" id="samples" name="samples" value={newSampleSize} onChange={handleSampleSizeChange} />
+                        <button className={`options text-center `} onClick={generateSamples}>Generate</button>
+                        <button className={`options text-center`} onClick={shuffle}>Shuffle</button>
+                        <button id="play-btn" className={`options text-center`} onClick={start}>start</button>
+                    </div>
                 </div>
-                <div>
-                    <button id="play-btn" className={`options text-center ${isSorting ? 'invisible' : ''}`} onClick={start}>start</button>
-                    <button id="stop-btn" className={`options text-center ${isSorting ? '' : 'invisible'}`}>Stop</button>
+                <div className={isSorting ? '' : 'hidden'}>
+                    <div className="space-x-4">
+                        <button id="stop-btn" className={`options text-center`}>Pause</button>
+                        <button id="reset-btn" className={`options text-center`}>Reset</button>
+                    </div>
                 </div>
             </div>
         </div>
