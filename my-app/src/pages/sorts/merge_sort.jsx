@@ -6,7 +6,7 @@ export default function MergeSort() {
     const [currentSampleSize, setCurrentSampleSize] = useState(100)
     const [samples, setSamples] = useState(Array.from(Array(100).keys()).map((value) => value + 1))
     const [isSorting, setIsSorting] = useState(false);
-    const [sortingSamples, setSortingSamples] = useState([])
+    const [stack, setStack] = useState([])
 
     async function generateSamples() {
         const samples = Array.from(Array(newSampleSize).keys()).map((value) => value + 1)
@@ -42,6 +42,18 @@ export default function MergeSort() {
         let sortedArray = [];
         let unsortedArray = [];
 
+        setStack((prevStack) => {
+            if (prevStack.length > 0) {
+                for (let i = 0; i < prevStack.length; i++) {
+                    if (prevStack[i].includes(leftArray[0]) || prevStack[i].includes(rightArray[0])) {
+                        prevStack.splice(i, 1); 
+                        i--;
+                    }
+                }
+            }
+            return prevStack;
+        });
+
         while (leftArray.length && rightArray.length) {
             if (leftArray[0] < rightArray[0]) {
                 sortedArray.push(leftArray.shift());
@@ -51,11 +63,13 @@ export default function MergeSort() {
 
             unsortedArray = samples
             unsortedArray = unsortedArray.filter(element => ![...sortedArray, ...leftArray, ...rightArray].includes(element))
-            setSamples([...sortingSamples, ...sortedArray, ...leftArray, ...rightArray, ...unsortedArray]);
-     
+            setSamples([...sortedArray, ...leftArray, ...rightArray, ...unsortedArray]);
+
             await sleep(10);
         }
-        setSortingSamples(sortedArray)
+
+        setStack((prevStack) => [...prevStack, [...sortedArray, ...leftArray, ...rightArray]])
+
         await sleep(10);
         return [...sortedArray, ...leftArray, ...rightArray];
     }
@@ -64,10 +78,17 @@ export default function MergeSort() {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
+    useEffect(() => {
+        console.log(stack)
+    }, [stack])
+
     async function start() {
+        setStack([])
         setIsSorting(true);
-        const sortedArray = await mergeSort(samples);
+        console.log(samples)
+        const sortedArray = await mergeSort();
         setSamples(sortedArray);
+        setStack([])
         setIsSorting(false);
     }
 
@@ -77,24 +98,17 @@ export default function MergeSort() {
                 <span>Merge Sort</span>
             </div>
             <div id="root" className="pl-2 pr-6 bg-davy-gray w-full h-100 mt-6 flex flex-row items-end ">
+                {stack.map((array, arrayIndex) => (
+                    array.map((value, index) => (
+                        <Bar height={(value / currentSampleSize) * 100} />
+                    ))
+                ))}
                 {samples.map((value, index) => (
                     <Bar height={(value / currentSampleSize) * 100} />
                 ))}
-                {/* {!isSorting && samples.map((value, index) => (
-                    <Bar height={(value / currentSampleSize) * 100} />
-                ))}
-                {isSorting && sortingSamples.map((subset, subsetIndex) => (
-                    <div>
-                        {
-                            subset.map((value, index) => (
-                                <Bar height={(value / currentSampleSize) * 100} />
-                            ))
-                        }
-                    </div>
-                ))} */}
             </div>
             <div className="ml-10 mt-4 mb-20 flex flex-row space-x-4">
-                <div className={isSorting ? 'hidden' : ''}>     
+                <div className={isSorting ? 'hidden' : ''}>
                     <div className="flex flex-row space-x-4">
                         <input type="number" id="samples" name="samples" value={newSampleSize} onChange={handleSampleSizeChange} />
                         <button className={`options text-center `} onClick={generateSamples}>Generate</button>
