@@ -78,9 +78,9 @@ export default function MergeSort() {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
-    useEffect(() => {
-        console.log(stack)
-    }, [stack])
+    // useEffect(() => {
+    //     console.log(stack)
+    // }, [stack])
 
     async function start() {
         setStack([])
