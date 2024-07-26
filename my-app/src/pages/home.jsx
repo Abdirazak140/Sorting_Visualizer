@@ -17,7 +17,7 @@ export default function Home() {
             <div className='text-snow flex flex-row items-center mt-60 text-lg space-x-4'>
                 <Link to="/merge-sort" className='options text-center'>Merge</Link>
                 <Link to="/quick-sort" className='options text-center'>Quick</Link>
-                <Link className='options text-center'>Bubble</Link>
+                <Link to="/bubble-sort" className='options text-center'>Bubble</Link>
                 <Link className='options text-center'>Miracle</Link>
             </div>
         </div>
